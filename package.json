@@ -18,7 +18,9 @@
   "homepage": "https://github.com/whatgoodisaroad/departure-deck",
   "dependencies": {
     "logfmt": "~0.21.0",
-    "express": "~3.4.8"
+    "express": "~3.4.8",
+    "xml2js": "~0.4.1",
+    "jade": "~1.2.0"
   },
   "engines": {
     "node": "0.10.x"
