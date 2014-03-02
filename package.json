@@ -20,7 +20,10 @@
     "logfmt": "~0.21.0",
     "express": "~3.4.8",
     "xml2js": "~0.4.1",
-    "jade": "~1.2.0"
+    "jade": "~1.2.0",
+    "rbush": "~1.3.2",
+    "geolib": "~1.3.5",
+    "underscore": "~1.6.0"
   },
   "engines": {
     "node": "0.10.x"
