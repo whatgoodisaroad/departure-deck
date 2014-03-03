@@ -190,10 +190,16 @@ function createHandler(folder, app, key) {
             buffer += chunk;
           })
           .on("end", function() {
-            points[key].parse(buffer, function(p) {
-              res.write(JSON.stringify(p));
+            try {
+              points[key].parse(buffer, function(p) {
+                res.write(JSON.stringify(p));
+                res.end();
+              });
+            }
+            catch (exc) {
+              res.write("[]");
               res.end();
-            });
+            }
           });
       })
       .on("error", function(e){
