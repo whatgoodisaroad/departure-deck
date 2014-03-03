@@ -219,13 +219,12 @@ must reload the page rather than simply hitting enter.
 
 ## Link to other code you're particularly proud of
 
-## Link to your resume or public profile
+I'm particularly proud of (and constantly amazed by the community response to)
+jQuery.validity, which is a jQuery validation plugin I've been maintaining for 
+several years. [Link](validity.thatscaptaintoyou.com)
 
-Prompt quoted below:
+## Public Profile
 
->Create a service that gives real-time departure time for public transportation (use freely available public API). The app should geolocalize the user.
->
->Here are some examples of freely available data:
->
->511 (San Francisco)
->Nextbus (San Francisco)
+This is my personal GitHub account, so hopefully this partially speaks for 
+itself as a public profile. My personal website is 
+[here](thatscaptaintoyou.com).
