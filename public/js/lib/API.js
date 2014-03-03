@@ -1,3 +1,5 @@
+//  A simple set of helpers for constructing JSON requests against the NextBus 
+//  API proxy
 define(["jquery"], function($) {
   return {
     agencies:function(f) {

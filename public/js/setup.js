@@ -1,3 +1,4 @@
+//  Configure require and run the app:
 requirejs.config({
   paths: {
     text: "requirejs-text/text",
@@ -12,7 +13,7 @@ requirejs.config({
     Locator:"/js/lib/Locator",
     StopList:"/js/lib/StopList",
     Predictions:"/js/lib/Predictions"
-}
+  }
 });
 
 require(["departure_deck"], function(dd) {

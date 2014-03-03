@@ -1,7 +1,10 @@
+//  API Proxy for NextBus.com
+
 var 
   http = require('http'),
   xml2js = require("xml2js");
 
+//  Setup a list of API functions to proxy:
 var points = {
   agencies:{
     command:"agencyList", 
@@ -138,6 +141,7 @@ var points = {
   }
 };
 
+//  Helper for parsing XML input:
 function xparse(x, f) {
   xml2js.parseString(x, { trim:true }, function (err, result) {
     if (err) throw err;
@@ -145,7 +149,10 @@ function xparse(x, f) {
   });  
 }
 
+//  Define a GET handler in Express.
 function createHandler(folder, app, key) {
+
+    //  Construct the route based on what arguments this key accepts:
   var route = "/" + folder + "/" + key;
   for (var idx = 0; idx < points[key].args.length; ++idx) {
     if (points[key].args[idx] === "stops") {
@@ -156,6 +163,7 @@ function createHandler(folder, app, key) {
     }
   }
 
+  //  Define a handler based on that route.
   app.get(route, function(req, res) {
     var options = {
       host: 'webservices.nextbus.com',
@@ -163,6 +171,7 @@ function createHandler(folder, app, key) {
       path:"/service/publicXMLFeed?command=" + points[key].command
     };
 
+    //  Translate the route parameters into GET parameters for the API.
     for (var idx = 0; idx < points[key].args.length; ++idx) {
       if (points[key].args[idx] === "stops") {
         options.path += req.params["stops"]
@@ -176,13 +185,13 @@ function createHandler(folder, app, key) {
         );
       }
     }
-
     options.path = options.path.replace(/\s/g, "%20");
 
+    //  We'll be returning JSON
     res.setHeader('Content-Type', 'application/json');
 
+    //  Read the response into a buffer for XML parsing:
     var buffer = "";
-
     http
       .get(options, function(resp){
         resp
@@ -191,6 +200,7 @@ function createHandler(folder, app, key) {
           })
           .on("end", function() {
             try {
+              //  Defer to the parse method for that key:
               points[key].parse(buffer, function(p) {
                 res.write(JSON.stringify(p));
                 res.end();
@@ -208,6 +218,7 @@ function createHandler(folder, app, key) {
   });
 }
 
+//  Initialize by defining function handlers.
 exports.init = function(folder, app, fn) {    
   for (var key in points) {
     if (points.hasOwnProperty(key)) {

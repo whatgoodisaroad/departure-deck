@@ -4,7 +4,7 @@ html(lang="en")
     title= pageTitle
     link(rel = "stylesheet", href = "/bootstrap/dist/css/bootstrap.min.css")
     link(rel = "stylesheet", href = "/css/app.css")
-    meta(name="viewport", content="width=500px, user-scalable=no")
+    meta(name="viewport", content="width=500, user-scalable=no")
   body
     div.container
       .hero
@@ -13,6 +13,9 @@ html(lang="en")
           span.coords-disp ...
     p.footer Data from 
       a(href="http://nextbus.com") NextBus
+      br
+      span By 
+        a(href="https://twitter.com/whatgoodisaroad") @whatgoodisaroad
     script(src = "/modernizr/modernizr.js")
     script(src = "/requirejs/require.js")
     script(src = "/js/setup.js")

@@ -2,7 +2,6 @@ html, body {
   background: #222;
   color:#fff;
 }
-
 .container { 
   width:500px; 
   margin:2em auto;
@@ -11,7 +10,6 @@ html, body {
   border-left-width:2em;
   padding:0;
 }
-
 .hero {
   background: #888;
   color:#222;
@@ -22,11 +20,6 @@ html, body {
 .hero h1 {
   font-weight: bold;
 }
-
-.coords-msg {
-
-}
-
 ul.route-list { list-style: none; padding-left: 0; }
 ul.route-list > li { 
   border-bottom: 2px solid #FA7500;
@@ -35,7 +28,6 @@ ul.route-list > li {
 ul.route-list > li:last-child {
   border-bottom:none;
 }
-
 .route-tag { 
   font-size: 30pt; 
   color:#333; 
@@ -47,35 +39,29 @@ ul.route-list > li:last-child {
   font-size: 15pt;
   padding:15px 6px;
 }
-
 ul.stop-list {
   list-style: none; padding-left: 0;
 }
-
 ul.stop-list > li {
   margin: 24px 0;
 }
-
 .stop-name { 
   color:#333; 
   font-size: 14pt; 
   font-weight: bold; 
   border-bottom:1px solid #333;
 }
-
 ul.direction-list {
   list-style: none; padding-left: 0;
 }
 ul.direction-list > li {
   margin: 6px 0 6px 0;
 }
-
 .direction-name {
   font-style: italic; 
   color:#ddd; 
   margin-bottom:-8px;
 }
-
 ul.time-list {
   list-style: none; padding-left: 0;
 }
@@ -85,5 +71,4 @@ ul.time-list > li {
   font-size: 20pt;
   color:#fff;
 }
-
 .footer { width:500px; margin:4px auto; text-align: center; }

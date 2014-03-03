@@ -1,9 +1,8 @@
+//  Tool to load a list of predictions based on a given StopList.
 define([
-  "jquery",
   "backbone", 
   "API"
 ], function(
-  $,
   Backbone, 
   API
 ) {
