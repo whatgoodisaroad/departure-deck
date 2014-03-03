@@ -29,14 +29,18 @@ define([
         self = this;
 
       loc.setup(function() {
+        var coords = loc.get("coords");
+
+        $(".coords-disp").text(coords.lat + ", " + coords.lng);
+
         var stopList = new StopList();
 
         self.set({ stopList:stopList });
 
-        stopList.loadByProximity(loc.get("coords"), function() {
+        stopList.loadByProximity(coords, function() {
 
           $(jade.render(slt, { stops:stopList.get("stops") }))
-            .appendTo("body");
+            .appendTo(".container");
 
           self.setupPredictionUpdater();
         });

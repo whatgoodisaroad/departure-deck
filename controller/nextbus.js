@@ -95,19 +95,21 @@ var points = {
     args:["a", "stops"],  // a => agency, stops => stop list
     parse:function(data, res) {
       xparse(data, function(result) {
-        if (!result.body.predictions) {
-          res("Bad stopID");
+        if (!result.body || !result.body.predictions) {
+          res([]);
         }
         else {
           var ps = result.body.predictions.map(function(p) {
             return {
               info:p.$,
-              directions:p.direction.map(function(d) {
-                return {
-                  title:d.$.title,
-                  times:d.prediction.map(function(p) { return p.$; })
-                };
-              })
+              directions:p.direction ?
+                p.direction.map(function(d) {
+                  return {
+                    title:d.$.title,
+                    times:d.prediction.map(function(p) { return p.$; })
+                  };
+                }) :
+                []
             }
           });
           res(ps);
@@ -174,6 +176,10 @@ function createHandler(folder, app, key) {
         );
       }
     }
+
+    options.path = options.path.replace(/\s/g, "%20");
+
+    console.log(options.path);
 
     res.setHeader('Content-Type', 'application/json');
 

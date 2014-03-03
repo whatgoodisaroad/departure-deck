@@ -1,12 +1,14 @@
-ul
+ul.route-list
   each route,routeName in stops
     li
-      span.route-tag= routeName.replace(/-.+$/, "")
-      span.route-name= routeName.replace(/^[^-]+-/, "")
-    ul
-      each stop,stopName in route
-        li
-          span= stopName
-          ul
-            each direction in stop
-              li(data-stop-tag= direction.stopTag) Loading...
+      div.route-title
+        div.route-tag= routeName.replace(/-.+$/, "")
+        div.route-name= routeName.replace(/^[^-]+-/, "")
+        div.clearfix
+      ul.stop-list
+        each stop,stopName in route
+          li
+            div.stop-name= stopName
+            ul.direction-list
+              each direction in stop
+                li(data-stop-tag= direction.stopTag)

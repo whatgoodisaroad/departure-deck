@@ -32,7 +32,9 @@ define([
             .value();
         })
         .reduce(function(x, y) { return x.concat(y); })
-        .map(function(s) { return s.routeTag + "~" + s.stopTag; })
+        .map(function(s) {
+          return s.routeTag + "~" + s.stopTag;
+        })
         .value();
     }
   });  
