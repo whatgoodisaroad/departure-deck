@@ -16,20 +16,15 @@ it a compelling problem to try and solve.
 ## Technical Track
 
 There is some ambiguity around exactly what technical stack I've taken. My 
-intention, and what I think is spiritually the track used, is the front-end 
-track. This is the space which is most interesting to me. However, in actuality,
-a significant amount of programming effort had gone into building backend 
-proxies for transit APIs (to circumvent same-origin) and the amount of code in 
-the backend makes it seem like a backend app.
+intention, and what I think is spiritually the track used, is frontend. 
+However, in the end, a significant amount of programming effort had gone into 
+building backend proxies for transit APIs (to deal with same-origin) and the 
+amount of code in the backend makes it seem like a backend app.
 
 I suppose the conclusion is that this is a full-stack project, even though it
-wasn't intended to be, and I haven't used any database technology.
-
-I think the truth of it is that, in order to make the front-end experience I 
-envisioned, a nontrivial amount of backend was necessary. I'm reminded of the 
-quote of Alan Kay's: "People who are really serious about software should make 
-their own hardware." Likewise, I think that people who are serious about 
-frontend, should make their own backend.
+wasn't intended to be, and I haven't used any database technology. I think the 
+truth of it is that, in order to make the front-end experience I envisioned, a 
+nontrivial amount of backend was necessary.
 
 ## Reasoning Behind Technical Choices
 
@@ -53,7 +48,7 @@ of libraries.
 
 Having chosen a language and framework, it was then possible to pursue the task 
 of selecting an API and implementing a proxy. My initial notion was to choose 
-511.org because I knew it, and their developer materials were more easily 
+511.org because I knew of it, and their developer materials were more easily 
 navigated. It was a mistake to have gone forward with this idea before 
 completely reading the API documentation, as the 511.org dataset was 
 insufficient for what I had planned on creating (specifically, it is deficient 
@@ -65,7 +60,7 @@ used, but preserved for posterity in the repository. (controller/511.js)
 Fortunately, the skeleton of that proxy could be repurposed into a NextBus 
 proxy (located at controller/nextbus.js) Structurally, these proxies defined an 
 internal set of API points to provide. In the code, this set is named `points`.
-These point definitions specify what is not common between API points so that 
+These point definitions specify what is specific to an API function so that 
 commonalities can be abstracted away, thereby minimizing code reuse.
 
 An example such point is quoted below:
@@ -85,11 +80,59 @@ An example such point is quoted below:
       }
     },
 
-This tells the proxy system to create a public url named "routes" which, when
+This tells the proxy system to create a GET url named "routes" which, when
 invoked, collects an argument for "a" (by constructing an express.js route) 
 and sends a request to the "routeList" command. As with 511.org, results can 
 only be returned in XML format, so we parse the XML data using the "xml2js" 
 NPM module and filter it for ease of consumption from the frontend.
+
+An example invocation of this API point is below:
+
+    GET /api/routes/sf-muni
+
+    [
+      {
+        "tag": "F",
+        "title": "F-Market & Wharves"
+      },
+      {
+        "tag": "J",
+        "title": "J-Church"
+      },
+      {
+        "tag": "KT",
+        "title": "KT-Ingleside/Third Street"
+      },
+      {
+        "tag": "L",
+        "title": "L-Taraval"
+      },
+      /* ... */
+    ]
+
+Another consideration regarding the APIs is acquiring the geographic locations
+of transit stops. This information changes rarely (how often is a transit stop 
+moved or a new one constructed?) so that information is taken from the databes,
+stored on disk and held in memory as the application runs.
+
+This is not enough data to warrant the use a database, however, insofar as it is 
+geographic data, database-like speedy is desired. In particular, we'd like to be
+able to determine the transit-stops nearby a given location without having to 
+traverse the entire set of stop locations. To do this, naturally, we need to 
+construct some kind of geospatial index.
+
+Luckily, there are a couple of NPM packages which can be used in tandem to 
+produce this effect. I used the "rbush" package for spatial indexing via an 
+R-Tree, and  "geolib" for computing linear distance from angular coordinates 
+(meters from lat/lng).
+
+To automate the process of constructing the index, the file 
+scripts/construct-stop-geospatial-index.js reads an XML document of stops 
+locations sourced from the NextBus API. Each one is encoded into the R-Tree and
+the index is finally serialized to a JSON file for the application to load at 
+launch. I discuss usage of the index in "Backend Organization".
+
+### Backend Organization
 
 ## Link to other code you're particularly proud of
 
