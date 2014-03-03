@@ -1,5 +1,5 @@
 each direction in directions
   .direction-name= direction.title
   ul.time-list
-    each time in direction.times
+    each time in _.first(direction.times, 4)
       li.secs(data-seconds = time.seconds, data-render-time = rtime)

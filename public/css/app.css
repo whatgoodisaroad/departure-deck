@@ -1,11 +1,11 @@
 html, body {
-  background: #333;
+  background: #222;
   color:#fff;
 }
 
 .container { 
   width:500px; 
-  margin:1em auto;
+  margin:2em auto;
   background: #aaa;
   border:1px solid #FA7500;
   border-left-width:2em;

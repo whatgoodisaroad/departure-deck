@@ -64,7 +64,8 @@ define([
           $("li[data-stop-tag='" + p.info.stopTag + "']")
             .html(jade.render(tlt, { 
               directions:p.directions,
-              rtime:new Date() * 1
+              rtime:new Date() * 1,
+              _:_
             }));
 
           callback();

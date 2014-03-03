@@ -179,8 +179,6 @@ function createHandler(folder, app, key) {
 
     options.path = options.path.replace(/\s/g, "%20");
 
-    console.log(options.path);
-
     res.setHeader('Content-Type', 'application/json');
 
     var buffer = "";
