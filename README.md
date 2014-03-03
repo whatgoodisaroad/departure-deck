@@ -221,10 +221,10 @@ must reload the page rather than simply hitting enter.
 
 I'm particularly proud of (and constantly amazed by the community response to)
 jQuery.validity, which is a jQuery validation plugin I've been maintaining for 
-several years. [Link](validity.thatscaptaintoyou.com)
+several years. [Link](http://validity.thatscaptaintoyou.com)
 
 ## Public Profile
 
 This is my personal GitHub account, so hopefully this partially speaks for 
 itself as a public profile. My personal website is 
-[here](thatscaptaintoyou.com).
+[here](http://thatscaptaintoyou.com).
