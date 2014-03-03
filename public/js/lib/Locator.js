@@ -19,7 +19,7 @@ define(["backbone"], function(Backbone, API) {
 
         if (callback) { callback(); }
       }
-      else {
+      else if (Modernizr.geolocation) {
         navigator.geolocation.getCurrentPosition(function(pos) { 
           self.set({ coords:{
             lat:pos.coords.latitude,

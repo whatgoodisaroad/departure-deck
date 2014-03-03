@@ -16,10 +16,5 @@ requirejs.config({
 });
 
 require(["departure_deck"], function(dd) {
-  if (Modernizr.geolocation) {
-    new dd().run();
-  }
-  else {
-    //  TODO: Add geolocation message or prompt
-  }
+  new dd().run();
 });
