@@ -18,9 +18,10 @@ var port = Number(process.env.PORT || 5000);
 
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/bower_components'));
+app.use(express.static(__dirname + '/views/public'));
 
 nextbus.init("api", app, function() {
-  geo.init(function() {
+  geo.init("api", app, function() {
     app.listen(port, function() {
       console.log("Listening on " + port);
     });

@@ -1,0 +1,6 @@
+each direction in directions
+  li
+    span.direction-name= direction.title
+    ul
+      each time in direction.times
+        li.secs(data-seconds = time.seconds, data-render-time = rtime) Loading...

@@ -1,12 +1,25 @@
-require.config({
+requirejs.config({
   paths: {
+    text: "requirejs-text/text",
+
     jquery: '/jquery/dist/jquery.min',
     underscore: "/underscore/underscore",
     backbone: "/backbone/backbone",
-    departure_deck: "/js/app"
+    jade: "/jade/jade",
+
+    departure_deck: "/js/app",
+    API:"/js/lib/API",
+    Locator:"/js/lib/Locator",
+    StopList:"/js/lib/StopList",
+    Predictions:"/js/lib/Predictions"
 }
 });
 
 require(["departure_deck"], function(dd) {
-  dd.run();
+  if (Modernizr.geolocation) {
+    new dd().run();
+  }
+  else {
+    //  TODO: Add geolocation message or prompt
+  }
 });

@@ -37,8 +37,9 @@ fs.readFile(process.argv[2], 'utf8', function(err, xmlText) {
           stop.$.lon,
           { 
             routeTitle:route.$.title,
+            routeTag:route.$.tag,
             stopTitle:stop.$.title,
-            tag:stop.$.tag,
+            stopTag:stop.$.tag,
             stopId:stop.$.stopId
           }
         ]);  

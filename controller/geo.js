@@ -8,13 +8,16 @@ var
   serialLoc = "data/routes-index.json",
   index = null,
   defaultDelta = 0.015,
-  defaultLimit = 10;
+  defaultLimit = 30;
 
-exports.init = function(fn) {
+exports.init = function(folder, app, fn) {
   console.log("Loading stop index...");
   fs.readFile(serialLoc, 'utf8', function(err, serial) {
     index = rbush(9).fromJSON(JSON.parse(serial));
     console.log("Loaded stop index");
+
+    makeHandler(folder, app);
+
     if (fn) fn();
   });
 };
@@ -31,7 +34,7 @@ exports.findStops = function(lat, lng, delta, limit) {
       lng + delta
     ];
 
-  return _.chain(index.search(boundingBox))
+  var stops = _.chain(index.search(boundingBox))
     .sortBy(function(s) {
       return geolib.getDistance(
         { latitude:lat, longitude:lng }, 
@@ -42,16 +45,38 @@ exports.findStops = function(lat, lng, delta, limit) {
     .first(limit)
     .groupBy("routeTitle")
     .value();
+
+  for (var key in stops) {
+    stops[key] = _.chain(stops[key]).groupBy("stopTitle").value();
+  }
+
+  return stops;
 };
 
-exports.init(function() {
-  var 
-    lat = 37.717022, 
-    lng = -122.4983466, 
-    delta = 1,
-    limit = 20;
+function makeHandler(folder, app) {
+  app.get("/" + folder + "/near/:lat/:lng", function(req, res) {
+    res.write(
+      JSON.stringify(
+        exports.findStops(
+          parseFloat(req.params.lat),
+          parseFloat(req.params.lng),
+          defaultDelta,
+          defaultLimit
+        )
+      )
+    );
+    res.end();
+  });
+}
 
-  var stops = exports.findStops(lat, lng, delta, limit)
+// exports.init(function() {
+//   var 
+//     lat = 37.717022, 
+//     lng = -122.4983466, 
+//     delta = 1,
+//     limit = 20;
 
-  console.log(stops);
-});
+//   var stops = exports.findStops(lat, lng, delta, limit)
+
+//   console.log(stops);
+// });

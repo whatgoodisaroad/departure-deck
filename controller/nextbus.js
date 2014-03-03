@@ -90,6 +90,32 @@ var points = {
     }
   },
 
+  predictions:{
+    command:"predictionsForMultiStops",
+    args:["a", "stops"],  // a => agency, stops => stop list
+    parse:function(data, res) {
+      xparse(data, function(result) {
+        if (!result.body.predictions) {
+          res("Bad stopID");
+        }
+        else {
+          var ps = result.body.predictions.map(function(p) {
+            return {
+              info:p.$,
+              directions:p.direction.map(function(d) {
+                return {
+                  title:d.$.title,
+                  times:d.prediction.map(function(p) { return p.$; })
+                };
+              })
+            }
+          });
+          res(ps);
+        }
+      });
+    }
+  },
+
   vehicles:{
     command:"vehicleLocations",
     args:["a", "r", "t"],
@@ -120,8 +146,8 @@ function xparse(x, f) {
 function createHandler(folder, app, key) {
   var route = "/" + folder + "/" + key;
   for (var idx = 0; idx < points[key].args.length; ++idx) {
-    if (points[key].args[idx] === "routeIDF") {
-      route += "/:agency/:code/:direction?";
+    if (points[key].args[idx] === "stops") {
+      route += "/:stops";
     }
     else {
       route += "/:" + points[key].args[idx];
@@ -136,11 +162,11 @@ function createHandler(folder, app, key) {
     };
 
     for (var idx = 0; idx < points[key].args.length; ++idx) {
-      if (points[key].args[idx] === "routeIDF") {
-        options.path += (
-          "&routeIDF=" + req.params["agency"] + "~" + req.params["code"] + 
-          "~" + req.params["direction"]
-        );
+      if (points[key].args[idx] === "stops") {
+        options.path += req.params["stops"]
+          .split(",")
+          .map(function(s) { return "&stops=" + s.replace("~", "|"); })
+          .join("");
       }
       else {
         options.path += (

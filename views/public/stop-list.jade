@@ -1,0 +1,12 @@
+ul
+  each route,routeName in stops
+    li
+      span.route-tag= routeName.replace(/-.+$/, "")
+      span.route-name= routeName.replace(/^[^-]+-/, "")
+    ul
+      each stop,stopName in route
+        li
+          span= stopName
+          ul
+            each direction in stop
+              li(data-stop-tag= direction.stopTag) Loading...
