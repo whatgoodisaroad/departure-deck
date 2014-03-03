@@ -116,9 +116,9 @@ moved or a new one constructed?) so that information is taken from the databes,
 stored on disk and held in memory as the application runs.
 
 This is not enough data to warrant the use a database, however, insofar as it is 
-geographic data, database-like speedy is desired. In particular, we'd like to be
-able to determine the transit-stops nearby a given location without having to 
-traverse the entire set of stop locations. To do this, naturally, we need to 
+geographic data, database-like query speed is desired. In particular, we'd like 
+to be able to determine the transit-stops nearby a given location without having 
+to traverse the entire set of stop locations. To do this, naturally, we need to 
 construct some kind of geospatial index.
 
 Luckily, there are a couple of NPM packages which can be used in tandem to 
@@ -133,6 +133,89 @@ the index is finally serialized to a JSON file for the application to load at
 launch. I discuss usage of the index in "Backend Organization".
 
 ### Backend Organization
+
+There are three important files regarding the Backend: web.js, 
+controller/nextbus.js and controller/geo.js. Web.js is the entry point for the 
+application. It sets up the route which delivers the webpage (there's only the
+index, since it's a one-page-app). It also sets up public folders for serving
+frontend resources such as JavaScript, CSS files and clientside templates.
+
+web.js also installs the two controllers. It loads the NextBus proxy, 
+instructing it to initialize and to register routes for it's API functions. 
+the NextBus proxy is discussed in "APIs / Proxies".
+
+web.js also initializes geo.js and instructs it to register a handler. This 
+controller behaves like the API proxy, except that it does not relay requests to 
+NextBus, but queries against the geospatial index for finding nearby transit 
+stops.
+
+Critical to the execution of geo.js is its `findStops` function. This function
+accepts a lat/lng as well as delta and limit arguments. It constructs a bounding
+box from the lat/lng by adding and subtracting delta from the coordinates (i.e.
+a rectangle encompassing the location). It then queries the geospatial index 
+with the bounding box, sorts the results by ascending distance from the initial
+lat/lng, and finally limits the number of results according to the limit 
+argument.
+
+These results are grouped by route and stop before being serialized into JSON 
+for transmission back to the client.
+
+### Frontend Organization
+
+The frontend follows the somewhat common pattern of require.js for dependency
+injection, and Backbone.js for code structure (although, in this case, I don't 
+use Backbone's MVC tools). The frontend also makes extensive use of Bower for 
+library management (similarly to how NPM is used for the backend).
+
+Among the Backbone models, app.js acts as a glue layer and defers specialized 
+information-gathering tasks to other models. After the data has been gathered,
+it is also concerned with rendering the data, using Jade tenplates.
+
+Other frontend models are described below:
+
+* *API.js* A very simple set of functions which wrap JSON requests to the API.
+* *Locator.js* A service for acquiring a lat/lng pair to use for location. May or
+  may not be sourced from the HTML5 GeoLocation API, see using the APP for 
+  details.
+* *StopList.js* Able to acquire/store a list of transit-stops given a location.
+* *Predictions.js* Able to acquire/store a list of departure time predictions 
+  for the stops listed in a given StopList.
+
+### Frontend Design
+
+The frontend is intended to be a clean, clear representation of live and 
+relevant data. I made what I interpret as a "flat" UI aesthetic, with particular
+inspiration drawn from 1960's graphic design. The interface was also designed 
+for mobile devices (as this is the most important use-case for a transit app) 
+however there is no need to differentiate the design between desktop and mobile.
+
+![OSX Example](https://raw.github.com/whatgoodisaroad/departure-deck/master/public/img/osx.png)
+
+![iOS Example](https://raw.github.com/whatgoodisaroad/departure-deck/master/public/img/ios.png)
+
+### Running the App
+
+I'm using the Heroku set of tools for Node.js development, so most of the 
+dependencies can be automatically installed via the package.json and bower.json 
+files.
+
+### Using the App
+
+As I am not physically in San Francisco (I'm in Oregon), I cannot directly test 
+the geolocation aspect of the app. When in the city, one has merely to approve 
+the HTML5 geolocate request and the app will attempt to find relevant transit 
+stops for that position.
+
+However, given my present location, and the time I can devote to this project, 
+there are certain to be black hole lat/lngs where the data is incomplete.
+
+To account for this, one can supply explicit lat/lng data via the URL hash. For
+example, a location which works well is at:
+
+    http://departure-deck.herokuapp.com/#37.759562,-122.426315
+
+The hash is inspected at page load, so, if you change the hash manually, you 
+must reload the page rather than simply hitting enter.
 
 ## Link to other code you're particularly proud of
 
